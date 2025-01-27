@@ -10,12 +10,12 @@ const CreditorValidatorSchema = z.object({
 });
 
 export class Creditor extends Base {
-    name:String;
+    name:string;
     created_at:Date;
-    is_active:Boolean;
+    is_active:boolean;
     updated_at?:Date;
 
-    constructor(name:String,is_active:boolean,updated_at?:Date){
+    constructor(name:string,is_active:boolean,updated_at?:Date){
         super();
         this.name = name;
         this.created_at = new Date();
