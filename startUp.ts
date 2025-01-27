@@ -1,8 +1,27 @@
 import "reflect-metadata";
-import { CreditorController } from "./controller/creditorController";
-import { container } from "tsyringe";
 import './shared/container';
+import express,{Application,Request,Response} from 'express';
+import database from './infra/db';
+import creditorRouter from "./router/creditorRouter";
 
 class StartUp{
-    private creditor = container.resolve(CreditorController);
+    public app:Application;
+    private _db: database = new database();
+
+    constructor(){
+        this.app = express();
+
+        this._db.createConnection();
+        this.routes();
+    }
+    routes(){
+        this.app.route("/").get((req,res) => {
+            res.send({versao: "0.0.1"});
+        });
+        
+        this.app.use(express.json());
+        this.app.use("/",creditorRouter);
+    }
 }
+
+export default new StartUp();

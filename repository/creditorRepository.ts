@@ -6,6 +6,8 @@ type Creditor = InferSchemaType<typeof CreditorSchema>;
 
 const CreditorRepository = {
     async add(data:Creditor){
+        console.log('banco de dados');
+        console.log(data);
         const creditor = new model(data);
         await creditor.save();
     },
