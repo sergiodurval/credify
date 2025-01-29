@@ -3,12 +3,15 @@ import './shared/container';
 import express,{Application,Request,Response} from 'express';
 import database from './infra/db';
 import creditorRouter from "./router/creditorRouter";
+import dotenv from 'dotenv';
+
 
 class StartUp{
     public app:Application;
     private _db: database = new database();
 
     constructor(){
+        dotenv.config();
         this.app = express();
 
         this._db.createConnection();
