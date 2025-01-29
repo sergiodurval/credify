@@ -6,16 +6,19 @@ type Creditor = InferSchemaType<typeof CreditorSchema>;
 
 const CreditorRepository = {
     async add(data:Creditor){
-        console.log('banco de dados');
-        console.log(data);
         const creditor = new model(data);
         await creditor.save();
     },
-    async inactivate(id: string): Promise<void> {
+    async activateOrInactivate(id: string , isActive:boolean): Promise<void> {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             throw new Error("Invalid ID format.");
         }
-        await model.updateOne({ _id: id }, { $set: { is_active: false } });
+        await model.updateOne({ _id: id }, { $set: { is_active: isActive } });
+    },
+    async getAll():Promise<Creditor[]>{
+        const query = {};
+        const creditors = await model.find(query);
+        return creditors;
     }
 };
 

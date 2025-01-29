@@ -1,7 +1,6 @@
 import { Base } from "./base";
 import {z} from "zod";
 
-// Define a schema for validation
 const CreditorValidatorSchema = z.object({
     name: z.string().min(1, "O nome não pode ser vazio."),
     created_at: z.date(),
@@ -15,17 +14,22 @@ export class Creditor extends Base {
     is_active:boolean;
     updated_at?:Date;
 
-    constructor(name:string,is_active:boolean,updated_at?:Date){
+    constructor(name:string,is_active:boolean,created_at?:Date,updated_at?:Date){
         super();
         this.name = name;
-        this.created_at = new Date();
+        
+        if(created_at){
+            this.created_at = created_at;
+        }else{
+            this.created_at = this.getCurrentDate();
+        }
+
         this.is_active = is_active;
         if(updated_at){
             this.updated_at = updated_at;
         }
     }
 
-    // Method to validate using zod, returning a boolean
     validate(): boolean {
         const result = CreditorValidatorSchema.safeParse({
             name: this.name,
@@ -43,10 +47,12 @@ export class Creditor extends Base {
         return true;
     }
 
-    //exemplo de uso
-    // Example usage with errors:
-    /*const invalidCreditor = new Creditor("", true, "invalid-date" as any);
-        if (!invalidCreditor.validate()) {
-            console.log("Errors:", invalidCreditor.validationErrors);
-        }*/
+    getCurrentDate():Date{
+        const date = new Date();
+        const formatter = new Intl.DateTimeFormat('en-US', { dateStyle: 'short' });
+        const formattedDate = formatter.format(date);
+        return new Date(formattedDate);
+    }
+
+    
 }

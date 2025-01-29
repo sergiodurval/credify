@@ -30,13 +30,41 @@ export class CreditorController{
     async inactivate(request:Request,response:Response){
         try{
             const {id} = request.body;
-            const result = await this._service.inactivate(id)
+            const result = await this._service.activateOrInactivate(id,false)
             if(result){
                 response.status(200).json({message:'credor inativado com sucesso'});
             }else{
                 response.status(400).json({message:'credor não localizado'});
             }
 
+        }catch(error){
+            response.status(500).json({error: 'ocorreu um erro'})
+        }
+    }
+
+    async activate(request:Request,response:Response){
+        try{
+            const {id} = request.body;
+            const result = await this._service.activateOrInactivate(id,true)
+            if(result){
+                response.status(200).json({message:'credor ativado com sucesso'});
+            }else{
+                response.status(400).json({message:'credor não localizado'});
+            }
+
+        }catch(error){
+            response.status(500).json({error: 'ocorreu um erro'})
+        }
+    }
+
+    async getAll(request:Request,response:Response){
+        try{
+            const result = await this._service.getAll();
+            if(result){
+                response.status(200).json(result);
+            }else{
+                response.status(404).json({message:'Não há nenhum credor cadastrado'});
+            }
         }catch(error){
             response.status(500).json({error: 'ocorreu um erro'})
         }
