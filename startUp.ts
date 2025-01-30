@@ -4,6 +4,7 @@ import express,{Application,Request,Response} from 'express';
 import database from './infra/db';
 import creditorRouter from "./router/creditorRouter";
 import dotenv from 'dotenv';
+import authRouter from "./router/authRouter";
 
 
 class StartUp{
@@ -23,7 +24,8 @@ class StartUp{
         });
         
         this.app.use(express.json());
-        this.app.use("/",creditorRouter);
+        this.app.use("/api/creditor",creditorRouter);
+        this.app.use("/api/auth",authRouter);
     }
 }
 
