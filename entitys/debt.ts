@@ -21,7 +21,7 @@ export class Debt extends Base{
     creditorId:String;
     validationErrors: string[] = [];
 
-    constructor(cpf:String,userId:String,totalAmount:Number,status:String,creditorId:string,updated_at?:Date){
+    constructor(cpf:String,userId:String,totalAmount:Number,status:String,creditorId:String,updated_at?:Date){
         super();
         this.cpf = cpf;
         this.userId = userId;

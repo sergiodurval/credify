@@ -1,4 +1,4 @@
-import { InferSchemaType } from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 import { ICreditorService } from "../contracts/iCreditorService";
 import { Creditor } from "../entitys/creditor";
 import CreditorRepository from "../repository/creditorRepository";

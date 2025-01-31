@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Base } from "./base";
 import {z} from "zod";
 
@@ -13,7 +14,7 @@ export class Creditor extends Base {
     created_at:Date;
     is_active:boolean;
     updated_at?:Date;
-
+    
     constructor(name:string,is_active:boolean,created_at?:Date,updated_at?:Date){
         super();
         this.name = name;

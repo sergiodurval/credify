@@ -6,9 +6,7 @@ import { User } from "../entitys/user";
 
 @injectable()
 export class AuthController{
-    constructor(@inject('IAuthService') private _service:IAuthService){
-        this._service = new AuthService();
-    }
+    constructor(@inject("IAuthService") private _service: IAuthService) {}
 
     async post(request:Request,response:Response){
         try{
