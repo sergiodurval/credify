@@ -15,12 +15,13 @@ export class CreditorController{
         try{
             const {name,is_active} = request.body;
             const creditor = new Creditor(name,is_active);
-            if(creditor.validate()){
-                await this._service.add(creditor);
-                response.status(201).json({message: 'credor cadastrado com sucesso'});
-            }else{
+            
+            if(!creditor.validate()){
                 response.status(400).json(creditor.validationErrors);
             }
+
+            await this._service.add(creditor);
+            response.status(201).json({message: 'credor cadastrado com sucesso'});
         }catch(error){
             console.log(error);
             response.status(500).json({error: 'ocorreu um erro'})
