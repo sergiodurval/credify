@@ -5,7 +5,8 @@ import database from './infra/db';
 import creditorRouter from "./router/creditorRouter";
 import dotenv from 'dotenv';
 import authRouter from "./router/authRouter";
-
+import { verifyJwt } from "./middleware/verifyJwt";
+import debtRouter from "./router/debtRouter";
 
 class StartUp{
     public app:Application;
@@ -26,6 +27,7 @@ class StartUp{
         this.app.use(express.json());
         this.app.use("/api/creditor",creditorRouter);
         this.app.use("/api/auth",authRouter);
+        this.app.use("/api/debt",verifyJwt,debtRouter);
     }
 }
 

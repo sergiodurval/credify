@@ -14,6 +14,10 @@ const DebtRepository = {
             creditorId:creditorId
         });
         await debt.save();
+    },
+    async getByUserId(userId:String): Promise<Debt[]>{
+        const debt = await model.find({userId:userId});
+        return debt;
     }
 };
 

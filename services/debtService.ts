@@ -5,8 +5,18 @@ import CreditorRepository from "../repository/creditorRepository";
 import DebtRepository from "../repository/debtRepository";
 
 export class DebtService implements IDebtService{
-    getById(userId: String): Promise<Debt[]> {
-        throw new Error("Method not implemented.");
+    async getByUserId(userId: String): Promise<Debt[]> {
+        try{
+            const result = await DebtRepository.getByUserId(userId);
+            if(!result){
+                throw new Error('Não foi encontrado nenhuma divida para o usuário informado');
+            }
+            const debts = this.mappingRepositoryToModel(result);
+            return debts;
+        }catch(error){
+            console.log(`Ocorreu um erro ao obter a divida:${error}`);
+            throw error;
+        }
     }
     async assignDebt(userId: String, cpf: String): Promise<void> {
         try{
@@ -38,6 +48,26 @@ export class DebtService implements IDebtService{
 
     private getRandomAmount(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    private mappingRepositoryToModel(result:any):Debt[]{
+        const debts = new Array<Debt>();
+        console.log(result);
+        for(let i = 0 ; i < result.length ; i++){
+            const debt = new Debt
+            (
+                result[i].cpf,
+                result[i].userId.toString(),
+                parseFloat(result[i].totalAmount.toString()), 
+                result[i].status,
+                result[i].creditorId.toString(),
+                result[i].updated_at ? new Date(result[i].updated_at) : undefined 
+            )
+
+            debts.push(debt);
+        }
+
+        return debts;
     }
     
 
