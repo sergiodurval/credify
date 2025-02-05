@@ -4,10 +4,14 @@ import {container} from 'tsyringe';
 import { AuthController } from "../controller/authController";
 
 const authRouter = express();
-const auth = container.resolve(AuthController);
+const authController = container.resolve(AuthController);
 
 authRouter.route("/register").post((req:Request,res:Response) => {
-    return auth.post(req,res);
+    return authController.register(req,res);
+});
+
+authRouter.route("/login").post((req:Request,res:Response) => {
+    return authController.login(req,res);
 })
 
 export default authRouter;
