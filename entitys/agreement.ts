@@ -11,13 +11,13 @@ const AgreementValidatorSchema = z.object({
 
 
 export class Agreement extends Base {
-    debtId:String;
+    debtId:string;
     totalInstallments:Number;
     userId:String;
     status:String;
     Installments:Installment[];
 
-    constructor(debtId:String,userId:String,status:String,Installments:Installment[]){
+    constructor(debtId:string,userId:string,status:string,Installments:Installment[]){
         super();
         this.debtId = debtId;
         this.totalInstallments = Installments.length;

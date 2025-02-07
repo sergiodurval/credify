@@ -9,12 +9,12 @@ const InstallmentValidatorSchema = z.object({
 });
 
 export class Installment extends Base{
-    status:String;
+    status:string;
     created_at:Date;
     updated_at?:Date;
     amount:Number;
 
-    constructor(status:String,amount:Number,updated_at?:Date){
+    constructor(status:string,amount:Number,updated_at?:Date){
         super();
          this.status = status;
          this.created_at = new Date();

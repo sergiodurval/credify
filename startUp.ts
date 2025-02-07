@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import authRouter from "./router/authRouter";
 import { verifyJwt } from "./middleware/verifyJwt";
 import debtRouter from "./router/debtRouter";
+import agreementRouter from "./router/agreementRouter";
 
 class StartUp{
     public app:Application;
@@ -28,6 +29,7 @@ class StartUp{
         this.app.use("/api/creditor",creditorRouter);
         this.app.use("/api/auth",authRouter);
         this.app.use("/api/debt",verifyJwt,debtRouter);
+        this.app.use('/api/agreement',verifyJwt,agreementRouter);
     }
 }
 
