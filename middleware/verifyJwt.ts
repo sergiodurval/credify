@@ -18,7 +18,6 @@ interface DecodedToken {
 
 export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
   const token = req.query.token as string || req.headers["x-token"] as string;
-  console.log(token);
   if (!token) {
     return next(createError(401, "Unauthorized: No token provided"));
   }

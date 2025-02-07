@@ -8,6 +8,10 @@ const debtController = container.resolve(DebtController);
 
 debtRouter.route("/").get((req:Request,res:Response) => {
     return debtController.getDebt(req,res);
+});
+
+debtRouter.route("/detail").get((req:Request,res:Response) => {
+    return debtController.getDebtDetail(req,res);
 })
 
 export default debtRouter;

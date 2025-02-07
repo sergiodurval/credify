@@ -1,6 +1,5 @@
 import { injectable , inject } from "tsyringe";
 import { IAuthService } from "../contracts/iAuthService";
-import { AuthService } from "../services/authService";
 import { Request,Response } from "express";
 import { User } from "../entitys/user";
 import { Login } from "../entitys/login";

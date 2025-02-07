@@ -28,7 +28,11 @@ const CreditorRepository = {
 
         const randomIndex = Math.floor(Math.random() * count);
         return await CreditorModel.findOne().skip(randomIndex);
+    },
+    async getById(creditorId:String):Promise<Creditor | null>{
+        return await model.findOne({_id:creditorId})
     }
+    
 };
 
 export default CreditorRepository;
