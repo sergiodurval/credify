@@ -1,13 +1,22 @@
-import { InferSchemaType } from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 import { IAgreementService } from "../contracts/iAgreementService";
 import { Agreement } from "../entitys/agreement";
 import { Installment } from "../entitys/installments";
 import AgreementRepository from "../repository/agreeementRepository";
 import DebtRepository from "../repository/debtRepository";
 import { AgreementSchema } from "../models/agreementSchema";
+import { CreateAgreement } from "../entitys/createAgreement";
+import { InstallmentStatus } from "../enums/installmentStatus";
 type AgreementModel = InferSchemaType<typeof AgreementSchema>;
 
 export class AgreementService implements IAgreementService {
+    async validateAlreadyExistAgreement(debtId: string): Promise<boolean> {
+        const agreement = await AgreementRepository.getAgreementByDebtId(debtId);
+        if(agreement){
+            return true;
+        }
+        return false;
+    }
     async getAll(userId: string): Promise<Agreement[]> {
         try{
             const debts = await DebtRepository.getByUserId(userId);
@@ -24,17 +33,47 @@ export class AgreementService implements IAgreementService {
     async getById(agreementId: string): Promise<Agreement> {
         try{
             const agreementModel = await AgreementRepository.getById(agreementId);
+            
             if(!agreementModel){
                 throw new Error('Não foi encontrado nenhum acordo para o id informado');
             }
+
             return this.convertToEntity(agreementModel);
+
         }catch(error){
             console.log(`Ocorreu o seguinte erro ao listar os acordos:${error}`)
             throw error;
         }
     }
-    create(agreement: Agreement): Promise<void> {
-        throw new Error("Method not implemented.");
+    async create(createAgreement:CreateAgreement): Promise<void> {
+        try{
+
+            const debt = await DebtRepository.getById(createAgreement.debtId);
+            if(!debt){
+                throw new Error('Não foi encontrado nenhuma divida para o id informado');
+            }
+
+            //parcelas
+            const installments = Array.from({ length: createAgreement.totalInstallment }, () => ({
+                status: InstallmentStatus.PENDING,
+                created_at: new Date(),
+                updated_at: new Date(),
+                amount: new mongoose.Types.Decimal128((Number(debt.totalAmount) / createAgreement.totalInstallment).toFixed(2)),
+            }));
+
+            await AgreementRepository.add
+            (
+                createAgreement.debtId,
+                Number(debt.totalAmount),
+                createAgreement.totalInstallment,
+                installments,
+                debt.userId.toString()
+            );
+
+        }catch(error){
+            console.log(`Ocorreu um erro ao realizar o acordo:${error}`)
+            throw error;
+        }
     }
 
     private async getAgreementByDebtId(debts:any[]):Promise<Agreement[]>{
@@ -99,6 +138,4 @@ export class AgreementService implements IAgreementService {
             installments
         );
     }
-    
-
 }

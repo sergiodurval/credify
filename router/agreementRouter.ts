@@ -14,4 +14,8 @@ agreementRouter.route('/:id').get((req:Request,res:Response) => {
     return agreementController.getById(req,res);
 })
 
+agreementRouter.route('/').post((req:Request,res:Response) => {
+    return agreementController.create(req,res);
+})
+
 export default agreementRouter;

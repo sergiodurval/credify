@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Base } from "./base";
 import { Installment } from "./installments";
 import {z} from "zod";

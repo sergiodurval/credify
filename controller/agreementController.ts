@@ -2,6 +2,7 @@ import { injectable,inject } from "tsyringe";
 import { IAgreementService } from "../contracts/iAgreementService";
 import { AgreementService } from "../services/agreementService";
 import {Request,Response} from 'express';
+import { CreateAgreement } from "../entitys/createAgreement";
 
 @injectable()
 export class AgreementController{
@@ -36,6 +37,29 @@ export class AgreementController{
                 }
                 response.status(200).json({agreement});
             }
+        }catch(error){
+            console.log(error);
+            response.status(500).json({error:`ocorreu o seguinte erro ao obter o acordo:${error}`});
+        }
+    }
+
+    async create(request:Request,response:Response){
+        try{
+            const {debtId,totalInstallment} = request.body;
+            const createAgreement = new CreateAgreement(debtId,totalInstallment);
+            const validateAgreementHasExist = await this._service.validateAlreadyExistAgreement(debtId);
+            
+            if(validateAgreementHasExist){
+                return response.status(400).json({message:'já existe um acordo para a divida informada'})
+            }
+
+            if(!createAgreement.validate()){
+                return response.status(400).json(createAgreement.validationErrors);
+            }
+
+            await this._service.create(createAgreement);
+            return response.status(201).json({message:'acordo criado com sucesso'});  
+            
         }catch(error){
             console.log(error);
             response.status(500).json({error:`ocorreu o seguinte erro ao obter o acordo:${error}`});

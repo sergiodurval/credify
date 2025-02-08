@@ -18,6 +18,9 @@ const DebtRepository = {
     async getByUserId(userId:String): Promise<Debt[]>{
         const debt = await model.find({userId:userId});
         return debt;
+    },
+    async getById(debtId:String): Promise<Debt | null>{
+        return await model.findOne({_id:debtId});
     }
 };
 
