@@ -16,9 +16,9 @@ export class AgreementController{
             if(userId){
                 const agreements = await this._service.getAll(userId);
                 if(!agreements || agreements.length == 0){
-                    response.status(404).json({message:'Não foi encontrado nenhum acordo para o usuário informado'});
+                     response.status(404).json({message:'Não foi encontrado nenhum acordo para o usuário informado'});
                 }else{
-                    response.status(200).json(agreements);
+                     response.status(200).json(agreements);
                 }
             }
         }catch(error){
@@ -50,19 +50,23 @@ export class AgreementController{
             const validateAgreementHasExist = await this._service.validateAlreadyExistAgreement(debtId);
             
             if(validateAgreementHasExist){
-                return response.status(400).json({message:'já existe um acordo para a divida informada'})
+                response.status(400).json({message:'já existe um acordo para a divida informada'});
+                return;
             }
 
             if(!createAgreement.validate()){
-                return response.status(400).json(createAgreement.validationErrors);
+                response.status(400).json(createAgreement.validationErrors);
+                return;
             }
 
             await this._service.create(createAgreement);
-            return response.status(201).json({message:'acordo criado com sucesso'});  
+             response.status(201).json({message:'acordo criado com sucesso'});  
             
         }catch(error){
             console.log(error);
-            response.status(500).json({error:`ocorreu o seguinte erro ao obter o acordo:${error}`});
+            if (!response.headersSent) { 
+                response.status(500).json({ error: `Ocorreu um erro ao criar o acordo: ${error}` });
+            }
         }
     }
 }

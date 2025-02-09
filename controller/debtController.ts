@@ -18,9 +18,11 @@ export class DebtController{
 
                 if(!debt || debt.length == 0){
                     response.status(404).json({message:'Não foi encontrado nenhuma divida para o usuário informado'})
-                }else{
-                    response.status(200).json(debt);
+                    return;
                 }
+                
+                response.status(200).json(debt);
+                return;
             }
         }catch(error){
             console.log(error);

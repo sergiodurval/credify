@@ -15,13 +15,16 @@ export class AuthController{
 
             if(!user.validate()){
                 response.status(400).json(user.validationErrors);
+                return;
             }
 
             const result = await this._service.register(user);
             if(!result){
                 response.status(400).json({message:'Ocorreu um erro ao realizar o cadastro'});
+                return;
             }    
             response.status(201).json({message:'cadastro realizado com sucesso'});
+            return;
             
         }catch(error){
             console.log(error);
@@ -36,6 +39,7 @@ export class AuthController{
             
             if(!login.validate()){
                 response.status(400).json(login.validationErrors);
+                return;
             }
 
             const result = await this._service.login(login.email,login.password);

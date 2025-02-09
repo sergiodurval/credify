@@ -18,6 +18,7 @@ export class CreditorController{
             
             if(!creditor.validate()){
                 response.status(400).json(creditor.validationErrors);
+                return;
             }
 
             await this._service.add(creditor);
