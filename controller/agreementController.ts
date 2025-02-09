@@ -34,8 +34,10 @@ export class AgreementController{
                 const agreement = await this._service.getById(agreementId);
                 if(!agreement){
                     response.status(404).json({message:'Não foi encontrado o acordo com id informado'});
+                    return
                 }
-                response.status(200).json({agreement});
+
+                return agreement;
             }
         }catch(error){
             console.log(error);
