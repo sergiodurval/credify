@@ -8,7 +8,7 @@ import authRouter from "./router/authRouter";
 import { verifyJwt } from "./middleware/verifyJwt";
 import debtRouter from "./router/debtRouter";
 import agreementRouter from "./router/agreementRouter";
-
+import { swaggerDocs } from './infra/swagger'; 
 class StartUp{
     public app:Application;
     private _db: database = new database();
@@ -21,7 +21,7 @@ class StartUp{
         this.routes();
     }
     routes(){
-        this.app.route("/").get((req,res) => {
+        this.app.route("/api").get((req,res) => {
             res.send({versao: "0.0.1"});
         });
         
@@ -30,6 +30,7 @@ class StartUp{
         this.app.use("/api/auth",authRouter);
         this.app.use("/api/debt",verifyJwt,debtRouter);
         this.app.use('/api/agreement',verifyJwt,agreementRouter);
+        swaggerDocs(this.app);
     }
 }
 
