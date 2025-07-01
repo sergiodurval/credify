@@ -43,7 +43,7 @@ export class AuthController{
             }
 
             const result = await this._service.login(login.email,login.password);
-            response.status(200).json({token:result});
+            response.status(200).json(result);
 
         }catch(error){
             console.log(error);

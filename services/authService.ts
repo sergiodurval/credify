@@ -8,12 +8,13 @@ import { IDebtService } from "../contracts/iDebtService";
 import { inject, injectable } from "tsyringe";
 import jwt,{Secret } from 'jsonwebtoken';
 import 'dotenv/config';
+import { UserResponse } from "../entitys/userResponse";
 
 @injectable()
 export class AuthService implements IAuthService{
     constructor(@inject("IDebtService") private debtService: IDebtService) {}
 
-    async login(email: string, password: string): Promise<string> {
+    async login(email: string, password: string): Promise<UserResponse> {
         try{
             const user = await UserRepository.findByEmail(email);
             if(!user){
@@ -28,7 +29,14 @@ export class AuthService implements IAuthService{
             
             const userPayload = { id: user._id.toString(), email: user.email };
             const accessToken = this.generateAccessToken(userPayload);
-            return accessToken;
+
+            const response:UserResponse = {
+                accessToken: accessToken,
+                userEmail:email,
+                userName:user.name
+            }
+            
+            return response;
         }catch(error){
             throw error;
         }
