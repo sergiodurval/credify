@@ -274,6 +274,74 @@ export const OpenApiSpecification = {
         },
       },
     },
+  "/debt/{id}": {
+  get: {
+    summary: "Obtém informações de pagamento de uma dívida específica",
+    description: "Retorna as opções de pagamento da dívida informada pelo ID",
+    tags: ["Debt"],
+    security: [{ XTokenAuth: [] }],
+    parameters: [
+      {
+        name: "id",
+        in: "path",
+        required: true,
+        schema: {
+          type: "string",
+        },
+        description: "ID da dívida a ser consultada",
+      },
+    ],
+    responses: {
+      200: {
+        description: "Detalhes de pagamento da dívida",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                debtId: { type: "string", example: "685f4247410bded5ffb0b29b" },
+                totalAmount: { type: "number", example: 52 },
+                creditorName: { type: "string", example: "Enel" },
+                minimumInstallments: { type: "integer", example: 1 },
+                maximumInstallments: { type: "integer", example: 5 },
+                instalmentsPayment: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      amount: { type: "number", example: 52 },
+                      number: { type: "integer", example: 1 },
+                    },
+                  },
+                },
+              },
+              example: {
+                debtId: "123",
+                totalAmount: 52,
+                creditorName: "Enel",
+                minimumInstallments: 1,
+                maximumInstallments: 5,
+                instalmentsPayment: [
+                  { amount: 52, number: 1 },
+                  { amount: 26, number: 2 },
+                  { amount: 17.33, number: 3 },
+                  { amount: 13, number: 4 },
+                  { amount: 10.4, number: 5 },
+                ],
+              },
+            },
+          },
+        },
+      },
+      404: {
+        description: "Dívida não encontrada",
+      },
+      500: {
+        description: "Erro interno",
+      },
+    },
+  },
+},
     "/agreement": { 
       get: {
         summary: "Obtém todos os acordos do usuário",
