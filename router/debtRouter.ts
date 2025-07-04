@@ -12,6 +12,10 @@ debtRouter.route("/").get((req:Request,res:Response) => {
 
 debtRouter.route("/detail").get((req:Request,res:Response) => {
     return debtController.getDebtDetail(req,res);
-})
+});
+
+debtRouter.route('/:id').get((req:Request,res:Response) =>{
+    return debtController.getDebtPaymentInfo(req,res);
+});
 
 export default debtRouter;

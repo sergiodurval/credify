@@ -1,11 +1,36 @@
 import { IDebtService } from "../contracts/iDebtService";
 import { Debt } from "../entitys/debt";
 import { DebtDetail } from "../entitys/debtDetail";
+import { DebtPaymentInfo } from "../entitys/debtPaymentInfo";
+import { InstallmentPayment } from "../entitys/installmentPayment";
 import { DebtStatus } from "../enums/debtStatus";
 import CreditorRepository from "../repository/creditorRepository";
 import DebtRepository from "../repository/debtRepository";
 
 export class DebtService implements IDebtService{
+    async getDebtPaymentInfo(debtId: String): Promise<DebtPaymentInfo | null> {
+        try{    
+            const debt = await DebtRepository.getById(debtId);
+
+            if(debt){
+                const creditor = await CreditorRepository.getById(debt.creditorId.toString());
+                const debtDetail = new DebtDetail(
+                    debtId,
+                    parseFloat(debt?.totalAmount == null ? '' : debt?.totalAmount.toString()),
+                    creditor?.name == null ? '' : creditor.name
+                )
+
+                const debtPaymentInfo = this.fillDebtPaymentInfo(debtDetail);
+                return debtPaymentInfo;
+            }    
+            
+            return null;
+
+        }catch(error){
+            console.log(`Ocorreu um erro ao obter os detalhes da divida:${error}`);
+            throw error;
+        }
+    }
     async getDebtDetail(userId: String): Promise<DebtDetail[]> {
         try{
             const result = await DebtRepository.getByUserId(userId);
@@ -101,6 +126,35 @@ export class DebtService implements IDebtService{
 
         return debtDetails;
     }
-    
+
+    private fillDebtPaymentInfo(debtDetail:DebtDetail): DebtPaymentInfo {
+
+        const totalAmount = parseFloat(debtDetail?.totalAmount?.toString() || "0");
+
+        const minimumInstallments = 1;
+        const maximumInstallmentsAllowed = 12; // ou outro valor fixo se quiser limitar
+        const maxInstallmentsByAmount = Math.floor(totalAmount / 10);
+
+        const maximumInstallments = Math.min(maxInstallmentsByAmount, maximumInstallmentsAllowed);
+
+        const installmentsPayment: InstallmentPayment[] = [];
+
+        for (let i = minimumInstallments; i <= maximumInstallments; i++) {
+            const installmentAmount = parseFloat((totalAmount / i).toFixed(2));
+            
+            if (installmentAmount >= 10) {
+                installmentsPayment.push(new InstallmentPayment(installmentAmount, i));
+            }
+        }
+
+        return new DebtPaymentInfo(
+            debtDetail.debtId,
+            totalAmount,
+            debtDetail.creditorName,
+            minimumInstallments,
+            maximumInstallments,
+            installmentsPayment
+        );
+    }
 
 }

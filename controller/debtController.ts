@@ -47,4 +47,20 @@ export class DebtController{
             response.status(500).json({error: 'ocorreu um erro'})
         }
     }
+
+    async getDebtPaymentInfo(request:Request,response:Response){
+        try{
+            const debtId = request.params.id;
+            const debtPaymentInfo = await this._service.getDebtPaymentInfo(debtId);
+            if(debtPaymentInfo){
+                response.status(200).json(debtPaymentInfo);
+            }else{
+                response.status(404).json({message:'Não foi encontrado nenhuma divida com o id informado'})
+            }
+            
+        }catch(error){
+            console.log(error);
+            response.status(500).json({error: 'ocorreu um erro'})
+        }
+    }
 }
