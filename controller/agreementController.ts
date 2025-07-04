@@ -27,23 +27,20 @@ export class AgreementController{
         }
     }
 
-    async getById(request:Request,response:Response){
-        try{
+    async getById(request: Request): Promise<any> {
+        try {
             const agreementId = request.params.id;
-            if(agreementId){
+            if (agreementId) {
                 const agreement = await this._service.getById(agreementId);
-                if(!agreement){
-                    response.status(404).json({message:'Não foi encontrado o acordo com id informado'});
-                    return
-                }
-
-                return agreement;
+                return agreement || null;
             }
-        }catch(error){
+            return null;
+        } catch (error) {
             console.log(error);
-            response.status(500).json({error:`ocorreu o seguinte erro ao obter o acordo:${error}`});
+            throw new Error(`Ocorreu o seguinte erro ao obter o acordo: ${error}`);
         }
     }
+
 
     async create(request:Request,response:Response){
         try{

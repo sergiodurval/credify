@@ -16,7 +16,7 @@ agreementRouter.get(
     "/:id",
     fromCache("agreement"),
     async (req: Request, res: Response) => {
-      const data = await agreementController.getById(req, res);
+      const data = await agreementController.getById(req);
       
       if (res.statusCode === 200 && data) {
         const cacheKey = res.locals.cacheKey;
