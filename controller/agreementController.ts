@@ -6,7 +6,7 @@ import { CreateAgreement } from "../entitys/createAgreement";
 
 @injectable()
 export class AgreementController{
-    constructor(@inject('IAgreementService')private _service:IAgreementService){
+    constructor(@inject('IAgreementService') private _service:IAgreementService){
         this._service = new AgreementService();
     }
 
