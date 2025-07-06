@@ -18,7 +18,8 @@ export class AgreementController{
                 if(!agreements || agreements.length == 0){
                      response.status(404).json({message:'Não foi encontrado nenhum acordo para o usuário informado'});
                 }else{
-                     response.status(200).json(agreements);
+                     const agreementsSanitized = agreements.map(agreement => agreement.toJSON());
+                     response.status(200).json(agreementsSanitized);
                 }
             }
         }catch(error){

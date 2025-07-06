@@ -4,6 +4,7 @@ import { Installment } from "./installments";
 import {z} from "zod";
 
 const AgreementValidatorSchema = z.object({
+    agreementId:z.string(),
     debtId:z.string(),
     totalInstallments:z.number(),
     userId:z.string(),
@@ -12,14 +13,16 @@ const AgreementValidatorSchema = z.object({
 
 
 export class Agreement extends Base {
+    agreementId:string;
     debtId:string;
     totalInstallments:Number;
     userId:String;
     status:String;
     Installments:Installment[];
 
-    constructor(debtId:string,userId:string,status:string,Installments:Installment[]){
+    constructor(agreementId:string, debtId:string,userId:string,status:string,Installments:Installment[]){
         super();
+        this.agreementId = agreementId;
         this.debtId = debtId;
         this.totalInstallments = Installments.length;
         this.userId = userId;
@@ -29,6 +32,7 @@ export class Agreement extends Base {
 
     validate():boolean{
         const result = AgreementValidatorSchema.safeParse({
+            agreementId:this.agreementId,
             debtId:this.debtId,
             totalInstallments:this.totalInstallments,
             userId:this.userId,
@@ -42,5 +46,16 @@ export class Agreement extends Base {
 
         this.validationErrors = [];
         return true;
+    }
+
+     toJSON() {
+        return {
+            agreementId:this.agreementId,
+            debtId: this.debtId,
+            totalInstallments: this.totalInstallments,
+            userId: this.userId,
+            status: this.status,
+            Installments: this.Installments.map(i => i.toJSON ? i.toJSON() : i)
+        };
     }
 }

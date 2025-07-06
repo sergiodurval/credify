@@ -1,12 +1,13 @@
 import mongoose, { InferSchemaType, Model } from "mongoose";
-import { AgreementSchema } from "../models/agreementSchema";
+import { AgreementSchema, IAgreement } from "../models/agreementSchema";
 import { AgreementStatus } from "../enums/agreementStatus";
 
-const model = mongoose.model('agreement', AgreementSchema);
+
 type Agreement = InferSchemaType<typeof AgreementSchema>;
+const model = mongoose.model<IAgreement>('agreement', AgreementSchema);
 
 const AgreementRepository = {
-    async getAgreementByDebtId(debtId: string): Promise<Agreement | null> {
+    async getAgreementByDebtId(debtId: string): Promise<IAgreement  | null> {
         if (!mongoose.Types.ObjectId.isValid(debtId)) {
             throw new Error("Invalid debtId format");
         }
@@ -14,7 +15,7 @@ const AgreementRepository = {
         const agreement = await model.findOne({ debtId: new mongoose.Types.ObjectId(debtId) });
         return agreement;
     },
-    async getById(agreementId:string):Promise<Agreement | null>{
+    async getById(agreementId:string):Promise<IAgreement | null>{
         if (!mongoose.Types.ObjectId.isValid(agreementId)) {
             throw new Error("Invalid debtId format");
         }

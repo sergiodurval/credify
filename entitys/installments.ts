@@ -40,4 +40,13 @@ export class Installment extends Base{
         this.validationErrors = [];
         return true;
     }
+
+    toJSON() {
+        return {
+            status: this.status,
+            amount: this.amount,
+            created_at: this.created_at,
+            updated_at: this.updated_at
+        };
+    }
 }

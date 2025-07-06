@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, {Types } from "mongoose";
 
 export const AgreementSchema = new mongoose.Schema({
     debtId:{type: mongoose.Schema.Types.ObjectId, required: true , ref:'Debt'},
@@ -15,7 +15,7 @@ export const AgreementSchema = new mongoose.Schema({
 })
 
 export interface IAgreement extends Document {
-    _id: mongoose.Types.ObjectId;
+    _id: Types.ObjectId;
     debtId:{type: mongoose.Schema.Types.ObjectId, required: true , ref:'Debt'},
     totalInstallments:{type:Number},
     amount:{type:Number},

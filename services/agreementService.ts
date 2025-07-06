@@ -4,7 +4,7 @@ import { Agreement } from "../entitys/agreement";
 import { Installment } from "../entitys/installments";
 import AgreementRepository from "../repository/agreeementRepository";
 import DebtRepository from "../repository/debtRepository";
-import { AgreementSchema } from "../models/agreementSchema";
+import { AgreementSchema, IAgreement } from "../models/agreementSchema";
 import { CreateAgreement } from "../entitys/createAgreement";
 import { InstallmentStatus } from "../enums/installmentStatus";
 type AgreementModel = InferSchemaType<typeof AgreementSchema>;
@@ -85,9 +85,10 @@ export class AgreementService implements IAgreementService {
             
                 const agreement = new Agreement
                 (
+                    agreementModel._id.toString(),
                     agreementModel.debtId.toString(),
                     debts[i].userId.toString(),
-                    agreementModel.status ?? '',
+                    agreementModel.status.toString(),
                     installments
                 );
 
@@ -107,9 +108,9 @@ export class AgreementService implements IAgreementService {
                     const installmentData = agreementModel.installments[x];
     
                     const installment = new Installment(
-                        installmentData.status ?? '',
+                        installmentData.status.toString(),
                         Number(installmentData.amount),
-                        installmentData.updated_at ? new Date(installmentData.updated_at) : undefined
+                        new Date(installmentData.updated_at.toString())
                     );
     
                     installments.push(installment);
@@ -120,21 +121,22 @@ export class AgreementService implements IAgreementService {
         return installments;
     }
 
-    private convertToEntity(agreementModel: AgreementModel): Agreement {
+    private convertToEntity(agreementModel: IAgreement): Agreement {
         // Convert installments
         const installments: Installment[] = agreementModel.installments.map(inst => {
             return new Installment(
-                inst.status ?? '',
+                inst.status.toString(),
                 Number(inst.amount), // Convert Decimal128 to Number
-                inst.updated_at ? new Date(inst.updated_at) : undefined
+                new Date(inst.updated_at.toString())
             );
         });
 
         // Convert and return Agreement entity
         return new Agreement(
+            agreementModel._id.toString(),
             agreementModel.debtId.toString(),
             agreementModel.userId.toString(),
-            agreementModel.status ?? '',
+            agreementModel.status.toString(),
             installments
         );
     }
