@@ -4,6 +4,7 @@ import { DebtDetail } from "../entitys/debtDetail";
 import { DebtPaymentInfo } from "../entitys/debtPaymentInfo";
 import { InstallmentPayment } from "../entitys/installmentPayment";
 import { DebtStatus } from "../enums/debtStatus";
+import AgreementRepository from "../repository/agreeementRepository";
 import CreditorRepository from "../repository/creditorRepository";
 import DebtRepository from "../repository/debtRepository";
 
@@ -14,10 +15,12 @@ export class DebtService implements IDebtService{
 
             if(debt){
                 const creditor = await CreditorRepository.getById(debt.creditorId.toString());
+                const agreement = await AgreementRepository.getById(debtId.toString());
                 const debtDetail = new DebtDetail(
                     debtId,
                     parseFloat(debt?.totalAmount == null ? '' : debt?.totalAmount.toString()),
-                    creditor?.name == null ? '' : creditor.name
+                    creditor?.name == null ? '' : creditor.name,
+                    agreement ? true : false
                 )
 
                 const debtPaymentInfo = this.fillDebtPaymentInfo(debtDetail);
@@ -115,10 +118,12 @@ export class DebtService implements IDebtService{
 
             const creditorId = result[i].creditorId;
             const creditor = await CreditorRepository.getById(creditorId);
+            const agreement = await AgreementRepository.getAgreementByDebtId(result[i]._id);
             const debtDetail = new DebtDetail(
                 result[i]._id,
                 parseFloat(result[i].totalAmount.toString()),
-                creditor?.name == null ? '' : creditor.name
+                creditor?.name == null ? '' : creditor.name,
+                agreement ? true : false
             )
 
             debtDetails.push(debtDetail);

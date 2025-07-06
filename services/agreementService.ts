@@ -89,9 +89,9 @@ export class AgreementService implements IAgreementService {
                     agreementModel.debtId.toString(),
                     debts[i].userId.toString(),
                     agreementModel.status.toString(),
+                    Number(agreementModel.amount),
                     installments
                 );
-
                 agreements.push(agreement);
             }
         }
@@ -137,6 +137,7 @@ export class AgreementService implements IAgreementService {
             agreementModel.debtId.toString(),
             agreementModel.userId.toString(),
             agreementModel.status.toString(),
+            Number(agreementModel.amount),
             installments
         );
     }

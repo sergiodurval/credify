@@ -33,7 +33,7 @@ export class AgreementController{
             const agreementId = request.params.id;
             if (agreementId) {
                 const agreement = await this._service.getById(agreementId);
-                return agreement || null;
+                return agreement.toJSON() || null;
             }
             return null;
         } catch (error) {
