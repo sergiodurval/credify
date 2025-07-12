@@ -123,7 +123,8 @@ export class DebtService implements IDebtService{
                 result[i]._id,
                 parseFloat(result[i].totalAmount.toString()),
                 creditor?.name == null ? '' : creditor.name,
-                agreement ? true : false
+                agreement ? true : false,
+                agreement ? agreement._id.toString() : ''
             )
 
             debtDetails.push(debtDetail);
