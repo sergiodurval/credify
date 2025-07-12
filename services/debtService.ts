@@ -7,6 +7,7 @@ import { DebtStatus } from "../enums/debtStatus";
 import AgreementRepository from "../repository/agreeementRepository";
 import CreditorRepository from "../repository/creditorRepository";
 import DebtRepository from "../repository/debtRepository";
+import UserRepository from "../repository/userRepository";
 
 export class DebtService implements IDebtService{
     async getDebtPaymentInfo(debtId: String): Promise<DebtPaymentInfo | null> {
@@ -60,13 +61,19 @@ export class DebtService implements IDebtService{
             throw error;
         }
     }
-    async assignDebt(userId: String, cpf: String): Promise<void> {
+    async assignDebt(userId: String): Promise<void> {
         try{
             const creditor = await CreditorRepository.getRandomCreditor();
+            const user = await UserRepository.findById(userId.toString());
+
             if(!creditor){
                 throw new Error('Não há nenhum credor cadastrado no banco de dados');
             }
-            const newDebt = this.generateDebt(userId, cpf,creditor._id.toString());
+            if(!user){
+                throw new Error('Não há nenhum usuário encontrado');
+            }
+
+            const newDebt = this.generateDebt(userId, user.cpf,creditor._id.toString());
             await DebtRepository.add(
                 newDebt.cpf,
                 newDebt.userId,

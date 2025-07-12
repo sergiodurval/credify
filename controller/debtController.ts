@@ -60,4 +60,17 @@ export class DebtController{
         }
     }
 
+    async assignDebt(request:Request,response:Response){
+        try{
+            const userId = request.user?.id;
+            if(userId){
+                await this._service.assignDebt(userId);
+                response.status(201).json({message:'débito atribuido com sucesso'})
+            }
+        }catch(error){
+            console.log(error);
+            response.status(500).json({error: 'ocorreu um erro'})
+        }
+    }
+
 }

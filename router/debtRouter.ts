@@ -36,5 +36,9 @@ debtRouter.get('/:id', fromCache("debt-payment"), async (req, res) => {
     }
 });
 
+debtRouter.route("/assign").post((req:Request,res:Response) => {
+    return debtController.assignDebt(req,res);
+});
+
 
 export default debtRouter;

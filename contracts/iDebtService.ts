@@ -4,7 +4,7 @@ import { DebtPaymentInfo } from "../entitys/debtPaymentInfo";
 
 export interface IDebtService{
     getByUserId(userId:String):Promise<Debt[]>;
-    assignDebt(userId:String,cpf:String):Promise<void>;
+    assignDebt(userId:String):Promise<void>;
     getDebtDetail(userId:String):Promise<DebtDetail[]>;
     getDebtPaymentInfo(debtId:String):Promise<DebtPaymentInfo | null>;
 }

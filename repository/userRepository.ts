@@ -13,6 +13,9 @@ const UserRepository = {
     },
     async findByEmail(email:string):Promise<User| null>{
         return await model.findOne({email:email})
+    },
+    async findById(userId:string):Promise<User| null>{
+        return await model.findById(userId);
     }
 }
 
